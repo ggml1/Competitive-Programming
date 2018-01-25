@@ -10,17 +10,15 @@ int dp[N][N][3];
 int solve(int h, int a, int cur){
 	if(h <= 0 || a <= 0) return 0;
 
-	if(dp[h][a][cur] != -1){
-		return dp[h][a][cur];
-	}
+	if(dp[h][a][cur] != -1) return dp[h][a][cur];
 
 	switch(cur){
 		case water:
-			return dp[h][a][cur] = max(solve(h - 20, a + 5, fire), solve(h + 3, a + 2, air)) + 1;
+			return dp[h][a][cur] = max(dp[h][a][cur], max(solve(h - 20, a + 5, fire), solve(h + 3, a + 2, air)) + 1);
 		case fire:
-			return dp[h][a][cur] = max(solve(h - 5, a - 10, water), solve(h + 3, a + 2, air)) + 1;
+			return dp[h][a][cur] = max(dp[h][a][cur], max(solve(h - 5, a - 10, water), solve(h + 3, a + 2, air)) + 1);
 		case air:
-			return dp[h][a][cur] = max(solve(h - 20, a + 5, fire), solve(h - 5, a - 10, water)) + 1;
+			return dp[h][a][cur] = max(dp[h][a][cur], max(solve(h - 20, a + 5, fire), solve(h - 5, a - 10, water)) + 1);
 	}
 }
 
@@ -34,17 +32,8 @@ int main(){
 
 		memset(dp, -1, sizeof(dp));
 
-		int f = solve(hp - 20, armor + 5, fire);
-
-		memset(dp, -1, sizeof(dp));
-
-		int w = solve(hp - 5, armor - 10, water);
-
-		memset(dp, -1, sizeof(dp));
-
-		int a = solve(hp + 3, armor + 2, air);
-
-		cout << max(f, max(w, a)) << endl;
+		cout << max(solve(hp - 20, armor + 5, fire), 
+				max(solve(hp - 5, armor - 10, water), solve(hp + 3, armor + 2, air))) << endl;
 	}
 
 	return 0;
