@@ -16,10 +16,6 @@ struct Number {
 		this->str = x;
 	}
 
-	bool operator==(int x) const {
-		return this->str == to_string(x);
-	}
-
 	bool operator!=(int x) const {
 		return this->str != to_string(x);
 	}
@@ -46,14 +42,12 @@ struct Number {
 		int j, k;
 
 		for(int i = sz1 - 1, j = sz2 - 1, k = 0; i >= 0 || j >= 0; --i, --j, ++k){
-			int cur = n3[k];
-
-			if(i >= 0 && j >= 0) cur += n1[i] + n2[j];
-			else if(i >= 0) cur += n1[i];
-			else if(j >= 0) cur += n2[j];
+			if(i >= 0 && j >= 0) n3[k] += n1[i] + n2[j];
+			else if(i >= 0) n3[k] += n1[i];
+			else if(j >= 0) n3[k] += n2[j];
 			
-			if(cur >= 10){
-				cur %= 10;
+			if(n3[k] >= 10){
+				n3[k] %= 10;
 
 				n3[k + 1]++;
 			}
@@ -68,8 +62,6 @@ struct Number {
 		}
 
 		while(ret.size() > 1 && ret[0] == '0') ret.erase(ret.begin());
-
-		this->str = ret;
 
 		Number ofRet(ret);
 
